@@ -1,0 +1,149 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    {% if homePage %}
+        <h1 style="margin-left: 20px;">All Posts:</h1>
+    {% elif followingPosts %}
+        <h1 style="margin-left: 20px;">Posts from People You Follow:</h1>
+    {% endif %}
+    {% if signedIn and homePage %}
+        <div class="d-flex justify-content-start" style="outline: 0.5px solid lightgray; margin: 20px;">
+                <form class="d-block justify-content-start" style="padding: 20px; width: 100%;" action="{% url 'index' %}" method="post">
+                    {% csrf_token %}                
+                    <h2>New Post</h2>
+                    <textarea style="width: 100%; display: block;" rows="4" name="bodyText" id='create_post_body'></textarea>
+                    <br>
+                    <button type="submit" class="btn-primary" style="padding: 10px; outline: none; border: none; border-radius: 5px; display: block;">Post!</button>
+                </form>
+        </div>
+    {% endif %}
+
+    
+
+    <!--Profile Stuff-->
+    {% if profile %}
+        <h1 style="margin-left: 20px;">{{user}}</h1>
+        <br>
+        <div class="card" style="width: 90%;  margin-left: 20px;">
+            {% if signedInUser != user and signedIn %} 
+                {% if areFollowing %}
+                    <button style="margin: 20px; width:10%" class='btn-danger' id="followBtn:{{user.id}}" following="true" onclick="follow('{{user.id}}')">Unfollow</button>
+                {% else %}
+                    <button style="margin: 20px; width:10%" class='btn-primary' id="followBtn:{{user.id}}" following="false" onclick="follow('{{user.id}}')">Follow</button>
+                {% endif %}
+            {% endif %}
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width: 10px;">
+                            <p style="padding-left: 20px;">Followers:</p>
+                        </td>
+                        <td>
+                            <p style="padding-left: 20px; font-weight: 700;" id="numFollowers:{{user.id}}">{{followerCount}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 10px;">
+                            <p style="padding-left: 20px;">Following:</p>
+                        </td>
+                        <td>
+                            <p style="padding-left: 20px; font-weight: 700;">{{followingCount}}</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <h2 style="margin-left: 20px;">Posts by {{user}}:</h2>
+    {% endif %}
+
+    <!--Posts-->
+    {% for p in page %}
+        <div class="card" style="width: 95%; margin-left: 20px;">
+            <a href="{% url 'viewProfile' p.user.id %}"style="padding: 10px;">{{p.user}}</a>
+            <p style="color: gray; font-size: small;margin-left: 10px;">{{p.date}}</p>
+
+            {% if not profile and p.user == user %}
+                <button id="EditPost:{{p.id}}" style="margin-left: 10px;padding: 7px; border: none; outline: none; border-radius: 7px; width: 5%; background-color: lightgray;" onclick="enableEdit('{{p.id}}')">Edit</button>
+            {% endif %}
+
+
+            {% if profile and p.user == signedInUser %}
+            <button id="EditPost:{{p.id}}"
+                style="margin-left: 10px;padding: 7px; border: none; outline: none; border-radius: 7px; width: 5%; background-color: lightgray;"
+                onclick="enableEdit('{{p.id}}')">Edit</button>
+            {% endif %}
+
+            <p style="padding: 10px; white-space: pre-wrap" id="PostBody:{{p.id}}">{{p.body}}</p>
+            
+            {% if not profile and p.user == user %}
+                <!--Edit stuff-->
+                <div id="EditPostDiv:{{p.id}}" hidden>
+                    <textarea id="EditPostTextarea:{{p.id}}" style="width: 100%; display: block;" rows="6">           
+                    </textarea>
+
+                    <button id="EditPostSubmit:{{p.id}}" class="btn-success" onclick="edit('{{p.id}}')">
+                        Save
+                    </button>
+                </div>
+            {% endif %}
+
+            {% if profile and p.user == signedInUser %}
+                <!--Edit stuff-->
+                <div id="EditPostDiv:{{p.id}}" hidden>
+                    <textarea id="EditPostTextarea:{{p.id}}" style="width: 100%; display: block;" rows="6">
+                                    </textarea>
+                
+                    <button id="EditPostSubmit:{{p.id}}" class="btn-success" onclick="edit('{{p.id}}')">
+                        Save
+                    </button>
+                </div>
+            {% endif %}
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width: 10px;">
+                            <p style="padding-left: 10px; color: gray;font-size: small; display: flex;">Likes:</p>
+                        </td>
+                        <td>
+                            <p style="padding-left: 10px; color: gray;font-size: small;" id="numLikes:{{p.id}}">{{p.numLikes}}</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            {% if signedIn %}
+                {% for dict in likedByThisUser %}
+                    {% if dict.post == p %}
+                        {% if dict.liked %}
+                             <button style="margin-left: 20px; width:10%" class="btn-danger" id={{p.id}} onclick="likePost('{{p.id}}')" liked="true">Unlike</button>
+                        {% else %}
+                            <button style="margin-left: 20px; width:10%" class="btn-primary" id={{p.id}} onclick="likePost('{{p.id}}')" liked="false">Like</button>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <!--Pagination-->  
+    <br> 
+    {% if page.has_next %}
+    <button class="btn-primary"style="border:none; outline: none; padding:10px; margin-left: 20px;">
+        <a href="?page={{ page.next_page_number }}" style="text-decoration: none; color: white; padding: 10px;">Next</a>
+    </button>
+    {% endif %}
+    
+    {% if page.has_previous %}
+    <button class="btn-primary"style="border:none; outline: none; padding:10px;  margin-left: 20px;" ><a style="text-decoration: none; color: white; padding: 10px;" href="?page={{ page.previous_page_number }}">Previous</a>
+    </button>
+    {% endif %}
+    <br>
+    <br>
+    <script src="{% static 'network/app.js' %}"></script>
+
+{% endblock %}
+

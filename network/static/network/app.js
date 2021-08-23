@@ -18,9 +18,13 @@ likePost = async () => {
       document.getElementById(`numLikes:${id}`).innerHTML = d.Likes;
       document.getElementById(`${id}`).setAttribute("liked", `${!liked}`);
       document.getElementById(`${id}`).innerHTML =
-        liked == false ? "Unlike" : "Like";
+        liked == false
+          ? `<i class="far fa-thumbs-down" style="font-size: xx-large; color: #ff4343;"></i> 
+                                <label style="margin-left: 10px; margin-top: 5px; pointer-events:none; color: gray;">Unlike</label>`
+          : `<i class="far fa-thumbs-up" style="font-size: xx-large; color: #19a7ff;"></i>
+                                <label style="margin-left: 10px; margin-top: 10px; pointer-events:none; color: gray;">Like</label>`;
       document.getElementById(`${id}`).className =
-        liked == false ? "btn-danger" : "btn-primary";
+        liked == false ? "likebtn" : "likebtn";
     });
 };
 

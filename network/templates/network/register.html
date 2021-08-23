@@ -1,30 +1,55 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
 
 {% block body %}
 
-    <h2>Register</h2>
 
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
+    
+    <div class="maindiv">
+        <form action="{% url 'register' %}" method="post" class="loginForm" enctype="multipart/form-data">
 
-    <form action="{% url 'register' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="email" name="email" placeholder="Email Address">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Register">
-    </form>
+            <h3>Register</h3>
+            {% csrf_token %}
+            <div class="form-group"  style="width: 80%;">
+                <input class="form-control inputfield" autofocus type="text" required name="username" placeholder="Username">
+            </div>
+            <div class="form-group" style="width: 80%;">
+                <input class="form-control inputfield" type="email" name="email" required placeholder="Email Address">
+            </div>
+            <div class="form-group" style="width: 80%;">
+                <input class="form-control inputfield" type="password" name="password" required placeholder="Password">
+            </div>
+            <div class="form-group" style="width: 80%;">
+                <input class="form-control inputfield" type="password" name="confirmation" required placeholder="Confirm Password">
+            </div>
+            <div class="form-group" style="width: 80%;">
+                <label for="profilePicInput" class="profilePicUpload">
+                    <i class="fas fa-image" style="margin-right: 10px;"></i>
+                    Choose a profile picture
+                </label>
+                <input class="form-control inputfield" id="profilePicInput" hidden type="file" name="profilePicture" onchange="setFileValue()">
+                <label id="fileNameDisplay">File name</label>
+            </div>
+            <input class="btn btn-primary login" type="submit" value="Register">
 
-    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+            {% if message %}
+            <div style="margin-top: 20px; color:rgb(209, 0, 0); font-weight: 500;">{{ message }}</div>
+            {% endif %}
+
+
+            <div style="width: 90%; font-size: small; text-align: center; margin-top: 35px;">
+                Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+            </div>
+
+            
+
+
+        </form>
+
+
+    </div>
+    <script src="{% static 'network/fileUpload.js' %}"></script>
+
 
 {% endblock %}

@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 class User(AbstractUser):
-    pass
+    profile_pic = models.ImageField(null=True, blank=True)
 
 
 class Post(models.Model):
@@ -14,6 +14,7 @@ class Post(models.Model):
         User, on_delete=models.CASCADE, related_name="user", null=True)
     date = models.DateTimeField(default=timezone.now())
     numLikes = models.IntegerField(default=0)
+    picture = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return f"User: {self.user}, Body: {self.body}, Date: {self.date}, Likes: {self.numLikes}"
@@ -25,11 +26,11 @@ class Like(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="user_liked")
 
+
 class Follower(models.Model):
-    #user is the person who is following someone
+    # user is the person who is following someone
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="isFollowing")
-    #following is who the user is following
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name="isFollowed")
-
-    
+    # following is who the user is following
+    following = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="isFollowed")

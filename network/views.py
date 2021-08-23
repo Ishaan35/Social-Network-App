@@ -15,11 +15,14 @@ from .models import Follower, Post, User, Like
 
 
 def index(request):
+
     if request.method == "POST":
         user = request.user
         print("New Post:")
         post = request.POST["bodyText"]
         p = Post()
+        if request.FILES.get("postPictureInput"):
+            p.picture = request.FILES.get("postPictureInput")
         p.user = user
         p.body = post
         p.date = timezone.now()
@@ -147,6 +150,10 @@ def register(request):
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
+
+            if(request.FILES.get('profilePicture')):
+                user.profile_pic = request.FILES.get('profilePicture')
+                user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
                 "message": "Username already taken."

@@ -1,3 +1,10 @@
+body {
+  background-color: whitesmoke;
+}
+* {
+  font-family: "Roboto", sans-serif;
+}
+
 .createPost {
   width: 100%;
   margin: 15px;
@@ -9,4 +16,107 @@
 .createPostInput {
   width: 90%;
   padding: 20px;
+}
+
+.loginForm {
+  width: 45%;
+  max-height: 87vh;
+  min-height: 50vh;
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1vh;
+  border-radius: 10px;
+  border: 1.5px solid rgb(208, 218, 233);
+}
+
+.maindiv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.login {
+  width: 80%;
+  background-color: #19a7ff;
+  border-radius: 20px;
+  height: 40px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+.login:hover {
+  background-color: rgb(16, 137, 213);
+  transition: 0.2s;
+}
+
+.inputfield {
+  background-color: rgb(242, 244, 250);
+  outline: none;
+  border: none;
+  border-radius: 0px;
+}
+
+.inputfield:focus {
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #19a7ff;
+  box-shadow: 1px;
+}
+
+.profilePicUpload {
+  width: 100%;
+  height: auto;
+  background-color: rgb(217, 235, 251);
+  color: gray;
+  padding: 10px;
+  text-align: center;
+  border-radius: 20px;
+  transition: 0.2s;
+}
+
+.profilePicUpload:hover {
+  background-color: rgb(71, 169, 255);
+  color: white;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.fileNameDiv {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  max-width: 70%;
+  background-color: rgb(199, 222, 250);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.postTextInput {
+  width: 100%;
+  display: block;
+  background-color: rgb(251, 251, 251);
+  border-radius: 10px;
+  border: 0.5px solid lightgray;
+  transition: 0.2s;
+  color: rgb(88, 88, 88);
+}
+
+.postTextInput:focus {
+  outline: none;
+  padding: 10px;
+  transition: 0.2s;
+  border: 1.5px solid#5ac0ff;
+}
+
+.likebtn {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+.likebtn:focus {
+  outline: none;
 }
